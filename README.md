@@ -1,89 +1,97 @@
 # go-html-reporter-generator
+## Gerador de relatórios HTML para testes BDD (Cucumber/Godog). Transforma arquivos JSON no formato Cucumber em relatórios HTML interativos e autossuficientes (com CSS e JS embutidos).
 
-Gerador de relatórios em **HTML** para resultados de testes automatizados (ex.: Cucumber JSON).  
-O objetivo é transformar arquivos de saída (`results.json`) em relatórios visuais e interativos, com métricas, gráficos e detalhes de execução.
+### 🚀 Instalação
+- Adicione ao seu projeto Go:
+  ```go
+  go get github.com/Vilariano/go-html-reporter-generator@latest
+  ```
+  Ou fixe uma versão específica:
+  ```go
+  go get github.com/Vilariano/go-html-reporter-generator@v1.0.2
+  ```
 
----
+### 📊 Uso via CLI
+- Se você quiser rodar direto pela linha de comando:
+  ```go
+  go run ./cmd/reporter --input report.json --output report.html
+  ```
+- --input: caminho para o JSON gerado pelo Cucumber/Godog
+- --output: caminho do relatório HTML que será criado
 
-## 🚀 Funcionalidades
+### 🧩 Uso como biblioteca
+- Você também pode usar no seu código Go:
+package main
+  ```go
+  import (
+      "encoding/json"
+      "os"
 
-- 📊 **Dashboard de métricas**: total de features, cenários e passos, além de status (passaram, falharam, ignorados).
-- 📈 **Gráficos interativos** (Chart.js):
-  - Pizza com distribuição de status.
-  - Barras com tempo médio por cenário.
-- 📝 **Detalhamento por Feature e Cenário**:
-  - Lista de passos com status, duração e localização.
-  - Badge de status por cenário.
-- 🎨 **Layout moderno e responsivo**:
-  - Navbar fixa com exportação para PDF.
-  - Sidebar com navegação rápida entre features.
-  - Cards coloridos para métricas e cenários.
+      "github.com/Vilariano/go-html-reporter-generator/models"
+      "github.com/Vilariano/go-html-reporter-generator/reporter"
+  )
 
----
+  func main() {
+      // Lê o JSON gerado pelo Cucumber/Godog
+      file, _ := os.Open("report.json")
+      defer file.Close()
 
-## 📦 Instalação
-- Clone o repositório:
-    ```bash
-    git clone https://github.com/seu-usuario/go-html-reporter-generator.git
-    cd go-html-reporter-generator
-    ```
+      var features []models.Feature
+      json.NewDecoder(file).Decode(&features)
 
-- Instale as dependências:
-    ```bash
-    go mod tidy
-    ```
+      // Gera o relatório HTML
+      reporter.GenerateReport(features, "report.html")
+  }
+  ```
 
-## ▶️ Uso
-- Execute o gerador passando o arquivo JSON de resultados e o nome do HTML de saída:
-    ```bash
-    go run cmd/reporter/main.go --input results.json --output report.html
-    ```
-    Isso irá gerar um arquivo report.html pronto para abrir no navegador.
+### 🧪 Exemplo com Godog
+- Um exemplo de teste integrado (bdd_test.go):
+  ```go
+  package main
 
+  import (
+      "encoding/json"
+      "os"
+      "testing"
 
-## 📂 Estrutura do projeto
-```Código
-go-html-reporter-generator/
-├── cmd/
-│   └── reporter/
-│       └── main.go         # Ponto de entrada do CLI
-├── internal/
-│   ├── generator/          # Lógica de geração do HTML
-│   │   └── generator.go
-│   ├── models/             # Estruturas de dados (Feature, Element, Step)
-│   │   └── models.go
-│   └── utils/              # Funções auxiliares (conversão, cálculos)
-│       └── utils.go
-├── templates/
-│   └── report.html.tmpl    # Template HTML do relatório
-├── assets/
-│   ├── style.css           # Estilos customizados
-│   └── script.js           # Scripts adicionais
-└── README.md
-```
+      "github.com/Vilariano/go-html-reporter-generator/models"
+      "github.com/Vilariano/go-html-reporter-generator/reporter"
+      "github.com/cucumber/godog"
+  )
 
-## 🛠️ Desenvolvimento
-- Adicionar novas métricas
-    - Alterar ReportData em generator.go.
-    - Atualizar o template report.html.tmpl.
+  func TestFeatures(t *testing.T) {
+      file, _ := os.Create("report.json")
+      defer file.Close()
 
-- Customizar layout
-    Editar assets/style.css para cores, fontes e posicionamento.
-    Ajustar report.html.tmpl para novos componentes.
+      opts := godog.Options{
+          Format: "cucumber",
+          Paths:  []string{"features"},
+          Output: file,
+      }
 
-- Funções auxiliares
-    - utils.NsToMs: converte nanosegundos em milissegundos.
-    - utils.AvgDuration: calcula tempo médio dos passos de um cenário.
+      suite := godog.TestSuite{
+          Name:                "petstore",
+          ScenarioInitializer: InitializeScenario,
+          Options:             &opts,
+      }
 
-## 📊 Exemplo de relatório
-- Cards de métricas no topo.
-- Gráficos lado a lado.
-- Features listadas com cenários e passos detalhados.
-- Exportação rápida para PDF via botão na navbar.
+      if suite.Run() != 0 {
+          t.Fail()
+      }
 
-## 🤝 Contribuição
-1. Faça um fork do projeto.
-2. Crie uma branch para sua feature (git checkout -b minha-feature).
-3. Commit suas alterações (git commit -m 'Adicionei nova feature').
-4. Push para a branch (git push origin minha-feature).
-5. Abra um Pull Request.
+      jsonFile, _ := os.Open("report.json")
+      defer jsonFile.Close()
+
+      var features []models.Feature
+      json.NewDecoder(jsonFile).Decode(&features)
+
+      reporter.GenerateReport(features, "report.html")
+  }
+  ```
+
+### 🎨 Relatório gerado
+- Dashboard com métricas (features, cenários, passos, status)
+- Gráficos interativos (pizza e barras) usando Chart.js
+- Cenários detalhados com passos, status e duração
+- Botões para expandir/recolher cenários e filtrar por status
+- Exportação para PDF via botão na interface
