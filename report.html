@@ -3,64 +3,180 @@
 <head>
 <meta charset="utf-8">
 <title>Relatório de Testes</title>
-<link rel="stylesheet" href="assets/style.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="assets/script.js"></script>
+
 <style>
-  body { font-family: Arial, sans-serif; margin:0; padding:0; display:flex; }
-  nav.navbar {
-    background:#2c3e50; color:#fff; padding:10px 20px;
-    display:flex; justify-content:space-between; align-items:center;
-    position:fixed; top:0; left:0; right:0; z-index:1000;
-  }
-  nav.navbar h1 { margin:0; font-size:20px; }
-  nav.navbar button { margin-left:10px; padding:6px 12px; border:none; border-radius:4px; cursor:pointer; font-weight:bold; background:#34495e; color:#fff; }
-  aside.sidebar {
-    width:220px; background:#f4f4f4; padding:20px; margin-top:60px; height:100vh; overflow-y:auto; position:fixed; left:0; top:0;
-  }
-  aside.sidebar h3 { margin-top:0; }
-  aside.sidebar ul { list-style:none; padding:0; }
-  aside.sidebar li { margin:8px 0; }
-  aside.sidebar a { text-decoration:none; color:#2c3e50; font-weight:bold; }
-  main { margin-left:240px; padding:80px 20px 20px; flex:1; }
-  .metrics { display:flex; flex-wrap:wrap; gap:15px; margin-bottom:20px; }
-  .card { flex:1 1 150px; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.2); text-align:center; font-weight:bold; }
-  .card.passed { background:#e0ffe0; color:green; }
-  .card.failed { background:#ffe0e0; color:red; }
-  .card.skipped { background:#fff5e0; color:orange; }
-  .card.total { background:#e0f0ff; color:#2c3e50; }
-  .dashboard { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; }
-  .charts {
-    display:flex;
-    flex-direction:row;  
-    gap:20px;
-    justify-content:center;
-    align-items:flex-start;
-    flex-wrap:wrap;
-    width:100%;
-  }
-  .chart-container {
-    flex:1 1 400px;
-    max-width:600px;
-    min-width:300px;
-  }
-  .chart-container canvas {
-    width:100% !important;
-    height:auto !important;
-  }
-  .feature { margin-bottom:30px; padding:15px; background:#fff; border-radius:6px; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
-  .scenario-card { margin:10px 0; padding:10px; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.1); }
-  .scenario-card h3 { margin:0 0 10px; }
-  .badge { padding:3px 8px; border-radius:12px; font-size:12px; font-weight:bold; }
-  .badge.passed { background:green; color:#fff; }
-  .badge.failed { background:red; color:#fff; }
-  .badge.skipped { background:orange; color:#fff; }
-  table { width:100%; border-collapse:collapse; margin-top:10px; }
-  th, td { border:1px solid #ccc; padding:8px; }
-  th { background-color:#f4f4f4; }
-  td.passed { color:green; font-weight:bold; }
-  td.failed { color:red; font-weight:bold; }
-  td.skipped { color:orange; font-weight:bold; }
+/* ===== Reset básico ===== */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #222;
+    font-weight: 600;
+}
+
+/* ===== Navbar ===== */
+nav.navbar {
+    background: #1f2d3d;
+    color: #fff;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+nav.navbar h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+nav.navbar button {
+    margin-left: 10px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #007bff;
+    color: #fff;
+    transition: background 0.3s;
+}
+nav.navbar button:hover {
+    background: #0056b3;
+}
+
+/* ===== Sidebar ===== */
+aside.sidebar {
+    width: 220px;
+    background: #f8f9fa;
+    padding: 20px;
+    margin-top: 60px;
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: 1px solid #ddd;
+}
+aside.sidebar h3 {
+    margin-top: 0;
+    font-size: 16px;
+    color: #444;
+}
+aside.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+aside.sidebar li {
+    margin: 8px 0;
+}
+aside.sidebar a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 500;
+}
+aside.sidebar a:hover {
+    color: #0056b3;
+}
+
+/* ===== Cards de métricas ===== */
+.metrics {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px;
+    gap: 15px;
+}
+.card {
+    flex: 1 1 150px;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+}
+.card.total { background:#e3f2fd; color:#0d47a1; }
+.card.passed { background:#d4edda; color:#155724; }
+.card.failed { background:#f8d7da; color:#721c24; }
+.card.skipped { background:#fff3cd; color:#856404; }
+
+/* ===== Conteúdo principal ===== */
+main {
+    margin-left: 240px;
+    padding: 80px 20px 20px;
+}
+.feature {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.scenario-card {
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-left: 6px solid transparent;
+}
+.scenario-card.passed { border-color:#28a745; }
+.scenario-card.failed { border-color:#dc3545; }
+.scenario-card.skipped { border-color:#ffc107; }
+
+/* ===== Tabelas ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+th {
+    background-color: #f4f4f4;
+    text-align: left;
+}
+td.passed { color: #28a745; font-weight: bold; }
+td.failed { color: #dc3545; font-weight: bold; }
+td.skipped { color: #ffc107; font-weight: bold; }
+
+/* ===== Gráficos ===== */
+.charts {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 20px 0;
+}
+.chart-container {
+    flex: 1 1 400px;
+    max-width: 600px;
+    min-width: 300px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.chart-container canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
 </style>
 </head>
 <body>
@@ -148,10 +264,71 @@
     
   </main>
 
+  
   <script>
-    
+// Script para interatividade do relatório
+
+console.log("Relatório carregado com sucesso!");
+
+// Expandir/Recolher todos os cenários
+function toggleAllScenarios(expand = true) {
+  const scenarios = document.querySelectorAll(".scenario-card");
+  scenarios.forEach(s => {
+    s.style.display = expand ? "" : "none";
+  });
+}
+
+// Filtrar cenários por status
+function filterScenarios(status) {
+  const rows = document.querySelectorAll("tbody tr");
+  rows.forEach(row => {
+    const statusCell = row.querySelector("td:nth-child(2)");
+    if (!status || statusCell.classList.contains(status)) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+}
+
+// Adicionar botões extras na navbar
+document.addEventListener("DOMContentLoaded", () => {
+  const navbar = document.querySelector("nav.navbar div");
+  if (navbar) {
+    const btnExpand = document.createElement("button");
+    btnExpand.textContent = "Expandir Todos";
+    btnExpand.onclick = () => toggleAllScenarios(true);
+
+    const btnCollapse = document.createElement("button");
+    btnCollapse.textContent = "Recolher Todos";
+    btnCollapse.onclick = () => toggleAllScenarios(false);
+
+    const btnShowPassed = document.createElement("button");
+    btnShowPassed.textContent = "Mostrar Passados";
+    btnShowPassed.onclick = () => filterScenarios("passed");
+
+    const btnShowFailed = document.createElement("button");
+    btnShowFailed.textContent = "Mostrar Falhados";
+    btnShowFailed.onclick = () => filterScenarios("failed");
+
+    const btnShowAll = document.createElement("button");
+    btnShowAll.textContent = "Mostrar Todos";
+    btnShowAll.onclick = () => filterScenarios(null);
+
+    navbar.appendChild(btnExpand);
+    navbar.appendChild(btnCollapse);
+    navbar.appendChild(btnShowPassed);
+    navbar.appendChild(btnShowFailed);
+    navbar.appendChild(btnShowAll);
+  }
+});
+
+  </script>
+
+  
+  <script>
     const ctx1 = document.getElementById('statusChart');
-    const statusChart = new Chart(ctx1, {
+    new Chart(ctx1, {
       type: 'pie',
       data: {
         labels: ['Passaram', 'Falharam', 'Ignorados'],
@@ -160,34 +337,24 @@
           backgroundColor: ['green', 'red', 'orange']
         }]
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
+      options: { responsive: true, maintainAspectRatio: false }
     });
 
-    
     const ctx2 = document.getElementById('timeChart');
-    const timeChart = new Chart(ctx2, {
+    new Chart(ctx2, {
       type: 'bar',
       data: {
-        labels: [
-          "Consultar pet existente",
-        ],
+        labels: ["Consultar pet existente",],
         datasets: [{
           label: 'Tempo médio (ms)',
-          data: [
-            "671.27",
-          ],
+          data: ["671.27",],
           backgroundColor: '#3498db'
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        scales: {
-          y: { beginAtZero: true }
-        }
+        scales: { y: { beginAtZero: true } }
       }
     });
   </script>

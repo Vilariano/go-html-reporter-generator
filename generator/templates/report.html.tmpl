@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Relatório de Testes</title>
+<!-- Chart.js via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- CSS embutido -->
+<style>
+{{.Style | safeCSS}}
+</style>
+</head>
+<body>
+  <nav class="navbar">
+    <h1>Relatório de Testes</h1>
+    <div>
+      <button onclick="window.print()">📄 Exportar PDF</button>
+      <!-- Botões extras são adicionados via script.js -->
+    </div>
+  </nav>
+
+  <aside class="sidebar">
+    <h3>Features</h3>
+    <ul>
+      {{range .Features}}
+        <li><a href="#{{.Name}}">{{.Name}}</a></li>
+      {{end}}
+    </ul>
+  </aside>
+
+  <main>
+    <section class="dashboard">
+      <div class="metrics">
+        <div class="card total">📊 Features: {{.TotalFeatures}}</div>
+        <div class="card total">📊 Cenários: {{.TotalScenarios}}</div>
+        <div class="card total">📊 Passos: {{.TotalSteps}}</div>
+        <div class="card passed">✔️ Passaram: {{.Passed}}</div>
+        <div class="card failed">❌ Falharam: {{.Failed}}</div>
+        <div class="card skipped">⚠️ Ignorados: {{.Skipped}}</div>
+      </div>
+      <div class="charts">
+        <div class="chart-container">
+          <canvas id="statusChart"></canvas>
+        </div>
+        <div class="chart-container">
+          <canvas id="timeChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    {{range .Features}}
+      <section class="feature" id="{{.Name}}">
+        <h2>{{.Keyword}}: {{.Name}}</h2>
+        <p><small>{{.URI}}</small></p>
+        {{range .Elements}}
+          <div class="scenario-card {{.Status}}">
+            <h3>{{.Keyword}}: {{.Name}} <span class="badge {{.Status}}">{{.Status}}</span></h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Passo</th>
+                  <th>Status</th>
+                  <th>Duração</th>
+                  <th>Local</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{range .Steps}}
+                <tr>
+                  <td><b>{{.Keyword}}</b> {{.Name}}</td>
+                  <td class="{{.Result.Status}}">{{.Result.Status}}</td>
+                  <td>{{printf "%.2f" (nsToMs .Result.Duration)}} ms</td>
+                  <td>{{.Match.Location}}</td>
+                </tr>
+                {{end}}
+              </tbody>
+            </table>
+          </div>
+        {{end}}
+      </section>
+    {{end}}
+  </main>
+
+  <!-- JS embutido -->
+  <script>
+{{.Script | safeJS}}
+  </script>
+
+  <!-- Gráficos -->
+  <script>
+    const ctx1 = document.getElementById('statusChart');
+    new Chart(ctx1, {
+      type: 'pie',
+      data: {
+        labels: ['Passaram', 'Falharam', 'Ignorados'],
+        datasets: [{
+          data: [{{.Passed}}, {{.Failed}}, {{.Skipped}}],
+          backgroundColor: ['green', 'red', 'orange']
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    const ctx2 = document.getElementById('timeChart');
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: [{{range .Features}}{{range .Elements}}"{{.Name}}",{{end}}{{end}}],
+        datasets: [{
+          label: 'Tempo médio (ms)',
+          data: [{{range .Features}}{{range .Elements}}{{printf "%.2f" (avgDuration .Steps)}},{{end}}{{end}}],
+          backgroundColor: '#3498db'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+</body>
+</html>

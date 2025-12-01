@@ -1,12 +1,16 @@
 package generator
 
 import (
+	"embed"
 	"html/template"
 	"os"
 
 	"github.com/Vilariano/go-html-reporter-generator/models"
 	"github.com/Vilariano/go-html-reporter-generator/utils"
 )
+
+//go:embed templates/report.html.tmpl assets/style.css assets/script.js
+var reportFS embed.FS
 
 type ReportData struct {
 	Features       []models.Feature
@@ -16,6 +20,9 @@ type ReportData struct {
 	Passed         int
 	Failed         int
 	Skipped        int
+	// Assets embutidos
+	Style  string
+	Script string
 }
 
 func GenerateHTML(features []models.Feature, output string) error {
@@ -41,7 +48,6 @@ func GenerateHTML(features []models.Feature, output string) error {
 					scenarioStatus = "failed"
 				case "skipped":
 					data.Skipped++
-					// só marca como skipped se não houver falha
 					if scenarioStatus != "failed" {
 						scenarioStatus = "skipped"
 					}
@@ -51,11 +57,23 @@ func GenerateHTML(features []models.Feature, output string) error {
 		}
 	}
 
-	// carregar template com funções extras
-	tmpl, err := template.New("").Funcs(template.FuncMap{
+	// carregar assets embutidos
+	styleBytes, _ := reportFS.ReadFile("assets/style.css")
+	scriptBytes, _ := reportFS.ReadFile("assets/script.js")
+	data.Style = string(styleBytes)
+	data.Script = string(scriptBytes)
+
+	// carregar template embutido com funções extras
+	tmpl, err := template.New("report.html.tmpl").Funcs(template.FuncMap{
 		"nsToMs":      utils.NsToMs,
 		"avgDuration": utils.AvgDuration,
-	}).ParseFiles("templates/report.html.tmpl")
+		"safeCSS": func(s string) template.CSS {
+			return template.CSS(s)
+		},
+		"safeJS": func(s string) template.JS {
+			return template.JS(s)
+		},
+	}).ParseFS(reportFS, "templates/report.html.tmpl")
 	if err != nil {
 		return err
 	}
@@ -66,7 +84,6 @@ func GenerateHTML(features []models.Feature, output string) error {
 	}
 	defer f.Close()
 
-	// usar a versão atualizada de features com Status calculado
 	data.Features = features
 
 	return tmpl.ExecuteTemplate(f, "report.html.tmpl", data)

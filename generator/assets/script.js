@@ -4,9 +4,9 @@ console.log("Relatório carregado com sucesso!");
 
 // Expandir/Recolher todos os cenários
 function toggleAllScenarios(expand = true) {
-  const scenarios = document.querySelectorAll("details.scenario");
+  const scenarios = document.querySelectorAll(".scenario-card");
   scenarios.forEach(s => {
-    s.open = expand;
+    s.style.display = expand ? "" : "none";
   });
 }
 
