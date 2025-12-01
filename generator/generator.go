@@ -86,5 +86,6 @@ func GenerateHTML(features []models.Feature, output string) error {
 
 	data.Features = features
 
-	return tmpl.ExecuteTemplate(f, "report.html.tmpl", data)
+	// Executa diretamente o template embutido
+	return tmpl.Execute(f, data)
 }
