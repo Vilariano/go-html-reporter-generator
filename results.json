@@ -1,0 +1,58 @@
+[
+    {
+        "uri": "features/pet_store.feature",
+        "id": "testar-api-petstore",
+        "keyword": "Funcionalidade",
+        "name": "Testar API PetStore",
+        "description": "",
+        "line": 2,
+        "elements": [
+            {
+                "id": "testar-api-petstore;consultar-pet-existente",
+                "keyword": "Cenário",
+                "name": "Consultar pet existente",
+                "description": "",
+                "line": 3,
+                "type": "scenario",
+                "steps": [
+                    {
+                        "keyword": "Dado ",
+                        "name": "que a API PetStore está disponível",
+                        "line": 4,
+                        "match": {
+                            "location": "pet_store_steps.go:31"
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 285166
+                        }
+                    },
+                    {
+                        "keyword": "Quando ",
+                        "name": "eu faço uma requisição GET para \"/pet/2025\"",
+                        "line": 5,
+                        "match": {
+                            "location": "pet_store_steps.go:32"
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 2013202625
+                        }
+                    },
+                    {
+                        "keyword": "Então ",
+                        "name": "o status da resposta deve ser 200",
+                        "line": 6,
+                        "match": {
+                            "location": "pet_store_steps.go:33"
+                        },
+                        "result": {
+                            "status": "passed",
+                            "duration": 320500
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]

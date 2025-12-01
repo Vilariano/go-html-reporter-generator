@@ -1,0 +1,169 @@
+/* ===== Reset básico ===== */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #222;
+    font-weight: 600;
+}
+
+/* ===== Navbar ===== */
+nav.navbar {
+    background: #1f2d3d;
+    color: #fff;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+nav.navbar h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+nav.navbar button {
+    margin-left: 10px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    background: #007bff;
+    color: #fff;
+    transition: background 0.3s;
+}
+nav.navbar button:hover {
+    background: #0056b3;
+}
+
+/* ===== Sidebar ===== */
+aside.sidebar {
+    width: 220px;
+    background: #f8f9fa;
+    padding: 20px;
+    margin-top: 60px;
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: 1px solid #ddd;
+}
+aside.sidebar h3 {
+    margin-top: 0;
+    font-size: 16px;
+    color: #444;
+}
+aside.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+aside.sidebar li {
+    margin: 8px 0;
+}
+aside.sidebar a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 500;
+}
+aside.sidebar a:hover {
+    color: #0056b3;
+}
+
+/* ===== Cards de métricas ===== */
+.metrics {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px;
+    gap: 15px;
+}
+.card {
+    flex: 1 1 150px;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+}
+.card.total { background:#e3f2fd; color:#0d47a1; }
+.card.passed { background:#d4edda; color:#155724; }
+.card.failed { background:#f8d7da; color:#721c24; }
+.card.skipped { background:#fff3cd; color:#856404; }
+
+/* ===== Conteúdo principal ===== */
+main {
+    margin-left: 240px;
+    padding: 80px 20px 20px;
+}
+.feature {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.scenario-card {
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-left: 6px solid transparent;
+}
+.scenario-card.passed { border-color:#28a745; }
+.scenario-card.failed { border-color:#dc3545; }
+.scenario-card.skipped { border-color:#ffc107; }
+
+/* ===== Tabelas ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+th {
+    background-color: #f4f4f4;
+    text-align: left;
+}
+td.passed { color: #28a745; font-weight: bold; }
+td.failed { color: #dc3545; font-weight: bold; }
+td.skipped { color: #ffc107; font-weight: bold; }
+
+/* ===== Gráficos ===== */
+.charts {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 20px 0;
+}
+.chart-container {
+    flex: 1 1 400px;
+    max-width: 600px;
+    min-width: 300px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.chart-container canvas {
+    width: 100% !important;
+    height: auto !important;
+}
