@@ -4,8 +4,8 @@ import (
 	"html/template"
 	"os"
 
-	"github.com/Vilariano/go-html-reporter-generator/internal/models"
-	"github.com/Vilariano/go-html-reporter-generator/internal/utils"
+	"github.com/Vilariano/go-html-reporter-generator/models"
+	"github.com/Vilariano/go-html-reporter-generator/utils"
 )
 
 type ReportData struct {

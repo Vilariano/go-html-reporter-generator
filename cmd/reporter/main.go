@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Vilariano/go-html-reporter-generator/internal/generator"
-	"github.com/Vilariano/go-html-reporter-generator/internal/parser"
+	"github.com/Vilariano/go-html-reporter-generator/generator"
+	"github.com/Vilariano/go-html-reporter-generator/parser"
 )
 
 func main() {

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/Vilariano/go-html-reporter-generator/internal/models"
+	"github.com/Vilariano/go-html-reporter-generator/models"
 )
 
 func ParseJSON(file string) ([]models.Feature, error) {

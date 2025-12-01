@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/Vilariano/go-html-reporter-generator/internal/models"
+	"github.com/Vilariano/go-html-reporter-generator/models"
 )
 
 // Converte nanosegundos para milissegundos
